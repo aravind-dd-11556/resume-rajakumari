@@ -1,1 +1,1 @@
-We need to validate the {data-zcqa} field is available in all the html elements , this is the most important step in handlebar file.
+Validate that the {data-zcqa} attribute is present on all interactive elements in the Handlebars file. This attribute is mandatory and will be used as the primary identifier for Selenium automation.
