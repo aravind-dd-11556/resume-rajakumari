@@ -22,7 +22,7 @@ async function buildPDF(html, name) {
         right: '0.4in',
       }
     })
-    await browser.close()
+    browser.close()
     console.log(`Saving file ${name}...`)
     fs.writeFileSync(`./dist/${name}.pdf`, pdf)
     console.log('PDF file saved to dist')
@@ -40,7 +40,7 @@ async function buildPDF(html, name) {
     </style>`;
 
     //Add proper link targets and secure them for lighthouse ;)
-    dom.window.document.querySelectorAll("a").forEach((a) => {
+    dom.window.document.querySelector("a").forEach((a) => {
       a.target = '_blank';
       a.rel = 'noreferrer';
     })
