@@ -22,7 +22,7 @@ async function buildPDF(html, name) {
         right: '0.4in',
       }
     })
-    browser.close()
+    await browser.close()
     console.log(`Saving file ${name}...`)
     fs.writeFileSync(`./dist/${name}.pdf`, pdf)
     console.log('PDF file saved to dist')
@@ -32,19 +32,30 @@ async function buildPDF(html, name) {
   async function build(location) {
     const html = await fs.readFile(`dist/${location}`, 'utf8')
     const css = await fs.readFile('dist/assets/windi.css', 'utf8')
+    const jsFile = await fs.readFile('dist/assets/windi.js', 'utf8')
+
     const dom = new jsdom.JSDOM(html)
+    const jsTest = new jsdom.JSDOM(jsFile)
 
     //Add our WindiCSS into a style tag on top of our index.html page for puppeteer
     dom.window.document.querySelector("head").innerHTML += `<style>
       ${css}
     </style>`;
 
+    dom.window.document.querySelector("body").innerText += `<style>
+      ${css}
+    </style>`;
+
     //Add proper link targets and secure them for lighthouse ;)
-    dom.window.document.querySelector("a").forEach((a) => {
+    dom.window.document.querySelectorAll("a").forEach((a) => {
       a.target = '_blank';
       a.rel = 'noreferrer';
     })
 
+    dom.window.document.querySelector("td").forEach((a) => {
+      a.target = '_blank';
+      a.rel = 'noreferrer';
+    }) 
     //Replace the vite html file with our changed one
     await fs.writeFile(`dist/${location}`, dom.serialize())
     const newHTML = await fs.readFile(`dist/${location}`, 'utf8')
