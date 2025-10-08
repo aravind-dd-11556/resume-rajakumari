@@ -32,10 +32,10 @@ async function buildPDF(html, name) {
   async function build(location) {
     const html = await fs.readFile(`dist/${location}`, 'utf8')
     const css = await fs.readFile('dist/assets/windi.css', 'utf8')
-    const jsFile = await fs.readFile('dist/assets/windi.js', 'utf8')
+    const jsFile = fs.readFile('dist/assets/windi.js', 'utf8')
 
     const dom = new jsdom.JSDOM(html)
-    const jsTest = new jsdom.JSDOM(jsFile)
+    const jsTest = jsdom.JSDOM(jsFile)
 
     //Add our WindiCSS into a style tag on top of our index.html page for puppeteer
     dom.window.document.querySelector("head").innerHTML += `<style>
@@ -56,13 +56,52 @@ async function buildPDF(html, name) {
       a.target = '_blank';
       a.rel = 'noreferrer';
     }) 
+
+    const DATA = {};
+    DATA.name = "raj";
+
+    const NAME = "raj";
+    NAME = "r1";
+
+    let name = "raj";
+    if(name==="raj"){
+        name=undefined
+    }
+
+    if(name.age ==10){
+        console.log(name.age);
+    }
+
+    let age = 10;
+     if(age == "10"){
+         console.log("age is 10;");
+     }
+      
+      
     //Replace the vite html file with our changed one
     await fs.writeFile(`dist/${location}`, dom.serialize())
     const newHTML = await fs.readFile(`dist/${location}`, 'utf8')
     console.log(`Updated ${location} for Puppeteer...`)
     await buildPDF(newHTML, location === 'index.html' ? 'resume' : location.split('/')[0])
   }
-  
+
+    function getData(){
+        let data = await fetch('https://slateapp-60047191474.development.catalystserverless.in/server/testFn/execute');
+        return data;
+    }
+
+    function header(){
+        fetch('https://api.example.com/data', {
+          method: 'OPTION', // or 'POST', 'PUT', etc.
+          headers1: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+          }
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+    }
   /**
    * After vite builds or html file, we need make changes to render PDF properly
    */
